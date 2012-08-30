@@ -1,0 +1,272 @@
+# Script Name    : task1.scr
+# Author         :
+# Script Calls   :
+# Called by      : ****** Menu Option
+# Date           :
+# Menu option    :SAP1
+#*****************************************************************************************
+# Modification Log :-
+#*****************************************************************************************
+<--start
+trace on
+
+IF (REPEXISTS("STDWFS") == 0) THEN
+#{
+        CREATEREP("STDWFS")
+#}
+ENDIF
+
+sv_r = CLASSEXISTS("STDWFS", "GLBDATA")
+IF (sv_r == 0) THEN
+#{
+        CREATECLASS("STDWFS", "GLBDATA", 5)
+#}
+ENDIF
+#=======================
+# Defining Form Layout.
+#=======================
+        STDWFS.WFSINPARAMVAL.FormTitle        ="EMPLOYEE DETAILS"
+        STDWFS.WFSINPARAMVAL.functionCode     = "Function Code"
+        STDWFS.WFSINPARAMVAL.empid            = "EMPID"
+        STDWFS.WFSINPARAMVAL.Name             = "NAME"
+        STDWFS.WFSINPARAMVAL.design           ="DESIGN"
+        STDWFS.WFSINPARAMVAL.dept             = "DEPT"
+        STDWFS.WFSINPARAMVAL.basic            ="BASIC"
+        STDWFS.WFSINPARAMVAL.splall           ="SPLALL"
+
+        sv_c = urhk_TBAF_SetAttrib("bafi2020.datablk.field_1|M")
+        sv_c = urhk_TBAF_SetAttrib("bafi2020.datablk.field_2|M")
+        sv_d = urhk_TBAF_SetAttrib("bafi2020.datablk.field_3|M")
+        sv_e = urhk_TBAF_SetAttrib("bafi2020.datablk.field_4|M")
+        sv_f = urhk_TBAF_SetAttrib("bafi2020.datablk.field_5|M")
+        sv_b = urhk_TBAF_SetAttrib("bafi2020.datablk.field_6|M")
+        sv_c = urhk_TBAF_SetAttrib("bafi2020.datablk.field_7|M")
+#        sv_d = urhk_TBAF_SetAttrib("bafi2020.datablk.field_8|M")
+#        sv_e = urhk_TBAF_SetAttrib("bafi2020.datablk.field_9|M")
+#        sv_f = urhk_TBAF_SetAttrib("bafi2020.datablk.field_10|M")
+#        sv_b = urhk_TBAF_SetAttrib("bafi2020.datablk.field_11|H")
+#        sv_a = urhk_TBAF_SetReplayKey("bafi2020.funcblk.key-f2")
+        sv_a = urhk_TBAF_SetReplayKey("bafi2020.optnblk.key-f2")
+        sv_a = urhk_TBAF_SetReplayKey("bafi2020.funcblk.key-f1")
+
+
+
+
+
+
+        #==========================================================
+        # Setting the Length of the Form Input Parameters.
+        #==========================================================
+        STDWFS.WFSINPARAMLEN.functionCode       =       "1"
+        STDWFS.WFSINPARAMLEN.empid              =       "20"
+        STDWFS.WFSINPARAMLEN.Name               =       "20"
+        STDWFS.WFSINPARAMLEN.design             =       "10"
+        STDWFS.WFSINPARAMLEN.dept               =       "5"  
+        STDWFS.WFSINPARAMLEN.basic              =       "15"
+        STDWFS.WFSINPARAMLEN.splall             =       "20"  
+
+ 
+        #==========================================================
+        # Initializing Form Output variables.
+        #==========================================================
+        STDWFS.WFSOUTPARAM.functionCode          =       ""
+        STDWFS.WFSOUTPARAM.emp_id                 =       ""
+        STDWFS.WFSOUTPARAM.Name                  =       ""
+        STDWFS.WFSOUTPARAM.design                =       ""
+        STDWFS.WFSOUTPARAM.dept                  =       ""
+        STDWFS.WFSOUTPARAM.basic                 =       ""
+        STDWFS.WFSOUTPARAM.splall                =       ""
+
+
+        #==========================================================
+        # Setting the Data Type for Form Input Parameters.
+        #==========================================================
+        STDWFS.WFSTYPE.functionCode     =       "S"
+        STDWFS.WFSTYPE.emp_id            =       "S"
+        STDWFS.WFSTYPE.Name             =       "S"
+        STDWFS.WFSTYPE.design           =       "S"
+        STDWFS.WFSTYPE.dept             =       "S"
+        STDWFS.WFSTYPE.basic            =       "S"
+        STDWFS.WFSTYPE.splall           =       "S"
+
+
+        #==========================================================
+        # Initializing required Global variables.
+        #==========================================================
+        STDWFS.WFSINPARAMVAL.ErrorMesg = ""
+        STDWFS.GLBDATA.ErrorFlg="Y"
+        #==============================================================
+        # Loop until custom Validations for the form are successful.
+        #==============================================================
+        WHILE (STDWFS.GLBDATA.ErrorFlg=="Y")
+        #{
+        #===========================================
+        # Displaying the Parameter Acceptance Form.
+        #===========================================
+        sv_a = urhk_SE_DispRepositories("STDWFS")
+
+
+
+
+
+
+
+        sv_u = urhk_WFS_ShowParamAcptFrm("")
+
+        #is any error in Displaying the Parameter Acceptance Form
+        # then exit the script.
+        #======================================================================
+                IF (STDWFS.WFSOUTPUT.ErrorCode == "-9999") THEN
+                #{
+                    EXITSCRIPT
+                #}
+                ENDIF
+                #======================================================================
+                # Obtaining the value of the Input Form Fields in Local Repository.
+                #======================================================================
+              STDWFS.GLBDATA.functionCode       =       STDWFS.WFSOUTPARAM.functionCode
+              STDWFS.GLBDATA.EMP_ID              =       STDWFS.WFSOUTPARAM.emp_id
+              STDWFS.GLBDATA.NAME               =       STDWFS.WFSOUTPARAM.Name
+              STDWFS.GLBDATA.DESIGN             =       STDWFS.WFSOUTPARAM.design
+              STDWFS.GLBDATA.DEPT               =       STDWFS.WFSOUTPARAM.dept
+              STDWFS.GLBDATA.BASIC              =       STDWFS.WFSOUTPARAM.basic
+              STDWFS.GLBDATA.SPLALL             =       STDWFS.WFSOUTPARAM.splall
+
+                print (STDWFS.GLBDATA.functionCode)
+                print (STDWFS.GLBDATA.EMP_ID)
+                print (STDWFS.GLBDATA.NAME)
+                print (STDWFS.GLBDATA.DESIGN)
+                print (STDWFS.GLBDATA.DEPT)
+                print (STDWFS.GLBDATA.BASIC)
+                print (STDWFS.GLBDATA.SPLALL)
+                #-------------------------------------------
+                # Field Value Validations
+                #---------------------------------------------
+                IF (STDWFS.GLBDATA.functionCode == "") THEN
+                #{
+                        sv_m = "ONLY FUNCTIONS A-ADD M-MODIFY I-INQUIRE AND R-REPORT ARE VALID HEAR"
+                        STDWFS.WFSINPARAMVAL.ErrorMesg = sv_m
+                        STDWFS.GLBDATA.ErrorFlg="Y"
+                        GOTO END
+                #}
+
+                ENDIF
+    IF ((STDWFS.GLBDATA.functionCode != "A") and (STDWFS.GLBDATA.functionCode != "M")and (STDWFS.GLBDATA.functionCode != "I")and (STDWFS.GLBDATA.functionCode !="R")) THEN
+                #{
+                        sv_m = "Only Function Code A-ADD M-MODIFY  I-INQUIRE and R- REPORT is used"
+                        STDWFS.WFSINPARAMVAL.ErrorMesg = sv_m
+                        STDWFS.GLBDATA.ErrorFlg="Y"
+                        GOTO END
+                #}
+                ENDIF
+                IF (STDWFS.GLBDATA.functionCode == "A") THEN
+                #{
+                        #--------------------------------------------
+                        # Inserting data in tables
+                        #--------------------------------------------
+                        sv_i = "insert into test.rone  values("
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.EMP_ID+"',"
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.NAME+"',"
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.DESIGN+"',"
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.DEPT+"',"
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.BASIC+"',"
+                        sv_i = sv_i +" '"+STDWFS.GLBDATA.SPLALL+"')"
+                        print (sv_i)
+                        sv_q = urhk_dbSQL(sv_i)
+                        print (sv_q)
+                        IF (sv_q != 1) THEN
+                        #{
+                                sv_q = urhk_dbSQL("commit")
+                                sv_m = "Record Added Succesfully."
+                                STDWFS.WFSINPARAMVAL.ErrorMesg = sv_m
+                                STDWFS.GLBDATA.ErrorFlg="Y"
+                                GOTO END
+                        #}
+                        ENDIF
+                #}
+                ENDIF
+#                IF (STDWFS.GLBDATA.functionCode == "I") THEN
+#               #{
+#
+#                   #--------------------------------------------
+                   # Selecting data from Table
+                   #--------------------------------------------
+#                    sv_i = "FatherName,Streetname,city,state|select FATHER_NAME," 
+#                    sv_i = sv_i + "STREET_NAME,CITY_NAME,STATE_NAME from VAD"
+#                    sv_i = sv_i + " where VOTER_NAME = '"+STDWFS.GLBDATA.Name+"'" 
+#                
+#                    print(sv_i)
+#                    sv_q=urhk_dbSelect(sv_i)
+#                    print(sv_q)
+#
+#                    IF(sv_q == 0) THEN
+#                    #{
+#                    STDWFS.WFSINPARAMVAL.FatherName    = "BANCS.OUTPARAM.FatherName"
+#                    STDWFS.WFSINPARAMVAL.Dateofbirth   = "BANCS.OUTPARAM.Dateofbirth"
+#                    STDWFS.WFSINPARAMVAL.Age           = "BANCS.OUTPARAM.Age"
+#                    STDWFS.WFSINPARAMVAL.Doorno        = "BANCS.OUTPARAM.Doorno"
+#                    STDWFS.WFSINPARAMVAL.Streetname    = "BANCS.OUTPARAM.Streetname"
+#                    STDWFS.WFSINPARAMVAL.city          = "BANCS.OUTPARAM.city"
+#                    STDWFS.WFSINPARAMVAL.state         = "BANCS.OUTPARAM.state"
+#                    STDWFS.WFSINPARAMVAL.pincode       = "BANCS.OUTPARAM.pincode"
+# 
+#                          
+#                     #}
+#
+#                     ENDIF
+#                 #}
+#                ENDIF     
+#                      
+#                IF (STDWFS.GLBDATA.functionCode == "M") THEN
+#
+#                #{
+#                        #--------------------------------------------
+#                        # Updating data in tables
+#                        #--------------------------------------------
+#
+#                        sv_i = "update VAD set FATHER_NAME= " 
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.FatherName+"'"
+#                        sv_i = "update VAD set STREET_NAME= " 
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.Streetname+"'"
+#                        sv_i = "update VAD set CITY_NAME= "
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.city+"'"
+#                        sv_i = "update VAD set STATE_NAME= " 
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.state+"'"
+#                        sv_i = "update VAD set PIN_CODE= "
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.pincode+"'"
+#                        sv_i = "update VAD set DATE_OF_BIRTH= "
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.Dateofbirth+"'"
+#                        sv_i = "update VAD set AGE= "
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.Age+"'"
+#                        sv_i = "update VAD set D_NO= "
+#                        sv_i = sv_i +"'"+STDWFS.GLBDATA.Doorno+"'"
+#                        sv_i = sv_i + " where VOTER_NAME= "
+#                        sv_i = sv_i + "'"+STDWFS.GLBDATA.Name+"'"
+#                        print (sv_i)
+#                        sv_q = urhk_dbSQL(sv_i)
+#                        print (sv_q)
+#                        IF (sv_q != 1) THEN
+#                        #{
+#                                sv_q = urhk_dbSQL("commit")
+#                                sv_m = "Record Updated Succesfully."
+#                                STDWFS.WFSINPARAMVAL.ErrorMesg = sv_m
+#                                STDWFS.GLBDATA.ErrorFlg="Y"
+#                                GOTO END
+#                        #}
+#                        ENDIF
+#                #}
+#
+#
+                ENDIF
+                #}
+
+
+        END:
+        #}
+        DO
+EXITSCRIPT
+
+trace off
+end-->
+
+
